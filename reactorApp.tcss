@@ -15,15 +15,20 @@ Button {
 #run {
 
 }
-.running #run {
+
+.refreshing #select {
+
+}
+
+.selecting #select {
     display: none;
 }
 
-#reacting {
+#cancel {
     display: none;
 }
-.running #reacting {
-    display: none;
+.selecting #cancel {
+    display: block;
 }
 
 #refresh {

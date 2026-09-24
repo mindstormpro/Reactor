@@ -20,6 +20,18 @@ Button {
 
 }
 
+#selectTree {
+    display: none;
+}
+
+.selecting #selectTree {
+    display: block;
+}
+
+.selecting #leaderboard {
+    display: none;
+}
+
 .selecting #select {
     display: none;
 }

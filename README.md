@@ -13,6 +13,6 @@ There are 3 main buttons in the app.
  * The `Select Bot` button,
  * And the `Refresh Bots` Button.
 
-The `Run Reactor` button... well... runs the reactor! It takes all bots currently loaded, pairs them up against eachother and runs them, and then graphs the results in a table.
-The `Select Bot` button allows you to select a bot in the current working directory or any subdirectories and load it, so it can be ran against the other loaded bots.
-The `Refresh Bots` button fetches the latest bots from the leaderboard and loads them, so they can be ran. (you don't need to load your own local bot to run, you just need to refresh the bots so there is something to run in the first place)
+The `Run Reactor` button... well... runs the reactor! It takes all bots currently loaded, pairs them up against eachother and runs them, and then graphs the results in a table.  
+The `Select Bot` button allows you to select a bot in the current working directory or any subdirectories and load it, so it can be ran against the other loaded bots.  
+The `Refresh Bots` button fetches the latest bots from the leaderboard and loads them, so they can be ran. (you don't need to load your own local bot to run, you just need to refresh the bots so there is something to run in the first place)  

@@ -339,10 +339,8 @@ class ReactorApp(App):
         table.zebra_stripes = True
         table.add_columns("Bot Name", "Avg Score", "Games Played", "Wins", "Losses")
 
-
-if __name__ == "__main__":
+def run():
     os.makedirs("cachedBots", exist_ok=True)
-
     for root, _, files in os.walk(os.getcwd() + "\\cachedBots\\"):  
         for filename in files:  # loop through files in the current directory
             botFiles.append(os.path.join(root, filename))
@@ -357,3 +355,8 @@ if __name__ == "__main__":
                 bots[filename]["ctx"] = ctx
     app = ReactorApp()
     app.run()
+
+if __name__ == "__main__":
+    run()
+
+

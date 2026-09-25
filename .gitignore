@@ -1,2 +1,6 @@
 cachedBots/
 *.js
+*dist*/
+__pycache__/
+tests/
+test-env/

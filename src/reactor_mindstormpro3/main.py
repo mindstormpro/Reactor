@@ -300,9 +300,6 @@ class ReactorRunner(HorizontalGroup):
             for bot1, bot2 in itertools.combinations(botList, 2):
                 self.playRounds(random.randrange(100, 150, 1), bot1, bot2)
 
-    def selectBot(self):
-        print("selecting")
-
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "run":
             self.runSim()
@@ -311,7 +308,6 @@ class ReactorRunner(HorizontalGroup):
             self.query_one("#run").disabled = True
             self.query_one("#select").disabled = True
         elif event.button.id == "select":
-            self.selectBot()
             self.screen.add_class("selecting")
         elif event.button.id == "cancel":
             self.screen.remove_class("selecting")
@@ -339,6 +335,7 @@ class ReactorApp(App):
         table.clear()
         table.zebra_stripes = True
         table.add_columns("Bot Name", "Avg Score", "Games Played", "Wins", "Losses")
+        
 
 def run():
     os.makedirs("cachedBots", exist_ok=True)

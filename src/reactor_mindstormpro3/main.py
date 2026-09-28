@@ -1,3 +1,4 @@
+from concurrent.futures import thread
 import textual.widgets._button
 from textual.widgets import DirectoryTree
 from enum import Flag
@@ -121,6 +122,36 @@ class ReactorRunner(HorizontalGroup):
         return value
 
     @work(thread=True)
+    def loadBots(self):
+        runButton: textual.widgets._button.Button = self.query_one("#run", Button)
+        selectButton = self.query_one("#select", Button)
+        refreshButton = self.query_one("#refresh", Button)
+        runButton.disabled = True
+        selectButton.disabled = True
+        refreshButton.disabled = True
+        os.makedirs("cachedBots", exist_ok=True)
+        i = 0
+        for root, _, files in os.walk(os.getcwd() + "\\cachedBots\\"):  
+            for filename in files:  # loop through files in the current directory
+                i: int = i + 1
+                runButton.label = f"Loading Bots... ({i} done)"
+                botFiles.append(os.path.join(root, filename))
+                botList.append(filename)
+                print(filename)
+                with open(os.path.join(root, filename), "r") as f:
+                    bots[filename] = {}
+                    bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
+                    bots[filename]["code"] = cleanSource(f.read())
+                    ctx = MiniRacer()
+                    ctx.eval(bots[filename]["code"])
+                    bots[filename]["ctx"] = ctx
+        runButton.disabled = False
+        runButton.label = "Run Reactor"
+        selectButton.disabled = False
+        refreshButton.disabled = False
+        
+
+    @work(thread=True)
     def refreshCache(self):
         refreshButton: textual.widgets._button.Button = self.query_one("#refresh", Button)
         global botFiles, botList, bots, leaderboardData, numOfBots
@@ -183,7 +214,6 @@ class ReactorRunner(HorizontalGroup):
         self.query_one("#run").disabled = False
         self.query_one("#select").disabled = False
         refreshButton.label = "Refresh Bot Cache"
-
 
             
     def updateLeaderboard(self, history, bot1, bot2, err):
@@ -317,7 +347,8 @@ class ReactorRunner(HorizontalGroup):
         yield Button("Select A Bot", id="select", variant="success")
         yield Button("Cancel", id="cancel", variant="error")
         yield Button("Refresh Bot Cache", id="refresh", variant = "warning")
-
+    def on_mount(self):
+        self.loadBots()
 class ReactorApp(App):
     CSS_PATH = "reactorApp.tcss"
     BINDINGS: list[tuple[str, str, str]] = []
@@ -338,19 +369,6 @@ class ReactorApp(App):
         
 
 def run():
-    os.makedirs("cachedBots", exist_ok=True)
-    for root, _, files in os.walk(os.getcwd() + "\\cachedBots\\"):  
-        for filename in files:  # loop through files in the current directory
-            botFiles.append(os.path.join(root, filename))
-            botList.append(filename)
-            print(filename)
-            with open(os.path.join(root, filename), "r") as f:
-                bots[filename] = {}
-                bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
-                bots[filename]["code"] = cleanSource(f.read())
-                ctx = MiniRacer()
-                ctx.eval(bots[filename]["code"])
-                bots[filename]["ctx"] = ctx
     app = ReactorApp()
     app.run()
 

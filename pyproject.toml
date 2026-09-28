@@ -3,7 +3,7 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 [project]
 name = "reactor_mindstormpro3"
-version = "1.0.0"
+version = "1.0.1"
 authors = [
   { name="Elio A.", email="elioanon20@Proton.me" },
 ]

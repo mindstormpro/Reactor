@@ -176,6 +176,7 @@ class ReactorRunner(HorizontalGroup):
                         bots[filename]["ctx"] = ctx
                     except Exception as e:
                         print(f"refresh Error: {e} on bot: {bot}")
+                        self.notify(f"{filename} failed to refresh, with exception: {e}", title="Failed Bot Refresh", severity="error", timeout=15 )
                         bots[filename] = None
                         botList.remove(filename)
                         botFiles.remove(os.path.join(root, filename))

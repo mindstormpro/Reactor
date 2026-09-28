@@ -133,18 +133,21 @@ class ReactorRunner(HorizontalGroup):
         i = 0
         for root, _, files in os.walk(os.getcwd() + "\\cachedBots\\"):  
             for filename in files:  # loop through files in the current directory
-                i: int = i + 1
-                runButton.label = f"Loading Bots... ({i} done)"
-                botFiles.append(os.path.join(root, filename))
-                botList.append(filename)
-                print(filename)
-                with open(os.path.join(root, filename), "r") as f:
-                    bots[filename] = {}
-                    bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
-                    bots[filename]["code"] = cleanSource(f.read())
-                    ctx = MiniRacer()
-                    ctx.eval(bots[filename]["code"])
-                    bots[filename]["ctx"] = ctx
+                try:
+                    i: int = i + 1
+                    runButton.label = f"Loading Bots... ({i} done)"
+                    botFiles.append(os.path.join(root, filename))
+                    botList.append(filename)
+                    print(filename)
+                    with open(os.path.join(root, filename), "r") as f:
+                        bots[filename] = {}
+                        bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
+                        bots[filename]["code"] = cleanSource(f.read())
+                        ctx = MiniRacer()
+                        ctx.eval(bots[filename]["code"])
+                        bots[filename]["ctx"] = ctx
+                except Exception as e:
+                    self.notify(f"{filename} failed to load on startup, with exception: {e}", title="Failed Bot Load", severity="error", timeout=15 )
         runButton.disabled = False
         runButton.label = "Run Reactor"
         selectButton.disabled = False

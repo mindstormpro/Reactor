@@ -140,11 +140,13 @@ class ReactorRunner(HorizontalGroup):
                     botList.append(filename)
                     print(filename)
                     with open(os.path.join(root, filename), "r") as f:
-                        bots[filename] = {}
-                        bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
-                        bots[filename]["code"] = cleanSource(f.read())
+                        source = cleanSource(f.read())
+                        name = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0])
                         ctx = MiniRacer()
                         ctx.eval(bots[filename]["code"])
+                        bots[filename] = {}
+                        bots[filename]["name"] =  name
+                        bots[filename]["code"] = source
                         bots[filename]["ctx"] = ctx
                 except Exception as e:
                     self.notify(f"{filename} failed to load on startup, with exception: {e}", title="Failed Bot Load", severity="error", timeout=15 )

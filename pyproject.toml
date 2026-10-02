@@ -3,7 +3,7 @@ requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 [project]
 name = "reactor_mindstormpro3"
-version = "1.0.1"
+version = "1.0.2"
 authors = [
   { name="Elio A.", email="elioanon20@Proton.me" },
 ]
@@ -15,7 +15,8 @@ dependencies = [
     "shutils",
     "BeautifulSoup4",
     "textual",
-    "py_mini_racer"
+    "py_mini_racer",
+    "colorama"
 ]
 classifiers = [
     "Programming Language :: Python :: 3",

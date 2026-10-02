@@ -11,6 +11,7 @@ import itertools
 import requests
 import time
 import shutil
+from colorama import Fore, Back, Style
 
 from bs4 import BeautifulSoup
 
@@ -66,22 +67,25 @@ class SelectorTree(DirectoryTree):
         ]
     def on_directory_tree_file_selected(self, event: DirectoryTree.FileSelected) -> None:
         self.log(event.path)
-        with open(event.path, "r") as f:
-            filename = os.path.basename(event.path)
-            botFiles.append(event.path)
-            botList.append(filename)
-            bots[filename] = {}
-            bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
-            bots[filename]["code"] = cleanSource(f.read())
-            ctx = MiniRacer()
-            ctx.eval(bots[filename]["code"])
-            bots[filename]["ctx"] = ctx
+        filename = os.path.basename(event.path)
+        try:
+            with open(event.path, "r") as f:
+                botFiles.append(event.path)
+                botList.append(filename)
+                bots[filename] = {}
+                bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
+                bots[filename]["code"] = cleanSource(f.read())
+                ctx = MiniRacer()
+                ctx.eval(bots[filename]["code"])
+                bots[filename]["ctx"] = ctx
+        except Exception as e:
+            self.notify(f"Failed to load {filename} with exception: {e}", title="Failed Bot Load", severity='error', timeout=15)
         self.screen.remove_class("selecting")
 
 
 
 class ReactorRunner(HorizontalGroup):
-    def devalue_resolve(self, index, pool, cache=None): # AI WROTE THIS FUNCTION BECAUSE LAZY AND DIFICULT :sorry:
+    def devalue_resolve(self, index, pool, cache=None): # AI WROTE THIS FUNCTION BECAUSE LAZY AND DIFICULT  EVERYTHING ELSE BESIDES THE FILLER WAS MADE BY ME :D
         if cache is None:
             cache = {}
         if index in cache:
@@ -143,7 +147,7 @@ class ReactorRunner(HorizontalGroup):
                         source = cleanSource(f.read())
                         name = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0])
                         ctx = MiniRacer()
-                        ctx.eval(bots[filename]["code"])
+                        ctx.eval(source)
                         bots[filename] = {}
                         bots[filename]["name"] =  name
                         bots[filename]["code"] = source
@@ -202,11 +206,11 @@ class ReactorRunner(HorizontalGroup):
                 botFiles.append(os.path.join(root, filename))
                 botList.append(filename)
                 print(filename)
-                with open(os.path.join(root, filename), "r") as f:
+                with open(os.path.join(root, filename), "r", encoding="utf-8") as f:
                     try:
                         bots[filename] = {}
                         bots[filename]["name"] = re.sub(r'[^a-zA-Z0-9_-]', '', os.path.splitext(filename)[0]) 
-                        bots[filename]["code"] = polyfillScript + f.read().replace("export default", "globalThis.botFunc =") + callScript
+                        bots[filename]["code"] = cleanSource(f.read())
                         ctx = MiniRacer()
                         ctx.eval(bots[filename]["code"])
                         bots[filename]["ctx"] = ctx
@@ -331,7 +335,7 @@ class ReactorRunner(HorizontalGroup):
         
     @work(thread=True)
     def runSim(self):
-        for i in range(1, 6):
+        for i in range(1, 2):
             for bot1, bot2 in itertools.combinations(botList, 2):
                 self.playRounds(random.randrange(100, 150, 1), bot1, bot2)
 
@@ -371,11 +375,24 @@ class ReactorApp(App):
         table.clear()
         table.zebra_stripes = True
         table.add_columns("Bot Name", "Avg Score", "Games Played", "Wins", "Losses")
-        
-
+logo = """       
+██████╗ ███████╗ █████╗  ██████╗████████╗ ██████╗ ██████╗ 
+██╔══██╗██╔════╝██╔══██╗██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗
+██████╔╝█████╗  ███████║██║        ██║   ██║   ██║██████╔╝
+██╔══██╗██╔══╝  ██╔══██║██║        ██║   ██║   ██║██╔══██╗
+██║  ██║███████╗██║  ██║╚██████╗   ██║   ╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+"""
 def run():
+    os.system("clear")
+    os.system("cls")
+    print(Fore.GREEN + logo)
+    print(Fore.RESET)
+    time.sleep(0.5)
     app = ReactorApp()
     app.run()
+    os.system("clear")
+    os.system("cls")
 
 if __name__ == "__main__":
     run()

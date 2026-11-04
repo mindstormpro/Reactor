@@ -2,7 +2,7 @@
  Reactor is a simple, easy to use app to test your Defector bots! 
  It helps to find bugs, download the source of other bots, and have your bot compete against the top bots on the leaderboard all without ever publishing your bot to the site!
  ## Installation
- Make sure you have python 3 installed, then  just run `py -m pip reactor_mindstormpro3` in your terminal!
+ Make sure you have python 3 installed, then  just run `py -m pip install reactor_mindstormpro3` in your terminal!
   After installing, make sure you restart your terminal.  
 
  ## Usage
